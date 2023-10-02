@@ -1,6 +1,7 @@
 import java.util.*;
+import java.io.Serializable;
 
-public class wordcounter implements Result {
+public class wordcounter implements Result, Serializable {
     private String[] strings;
     private String output;
 
