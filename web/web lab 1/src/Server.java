@@ -9,27 +9,31 @@ public class Server {
             ServerSocket server = new ServerSocket(5000);
             System.out.println("Server is up...");
 
-            Socket socket = server.accept();
-            System.out.println("connected...");
+            while (true){
+                Socket socket = server.accept();
+                System.out.println("connected...");
+                OutputStream out = socket.getOutputStream();
+                InputStream in = socket.getInputStream();
+                DataInputStream inn = new DataInputStream(in);
 
-            OutputStream out = socket.getOutputStream();
-            InputStream in = socket.getInputStream();
+                // Создаем экземпляр класса
+                wordcounter obj = new wordcounter(test);
 
-            DataInputStream inn = new DataInputStream(in);
+                //System.out.println(obj.getResult());
 
-            // Создаем экземпляр класса
-            wordcounter obj = new wordcounter(test);
+                // Отправляем объект клиенту
+                ObjectOutputStream Oout = new ObjectOutputStream(out);
+                Oout.writeObject(obj);
 
-            //System.out.println(obj.getResult());
+                socket = server.accept();
+                in = socket.getInputStream();
+                inn = new DataInputStream(in);
+                String answer = inn.readUTF();
+                System.out.println(answer);
+                //server.close();
+            }
 
-            // Отправляем объект клиенту
-            ObjectOutputStream Oout = new ObjectOutputStream(out);
-            Oout.writeObject(obj);
 
-            String answer = inn.readUTF();
-            System.out.println(answer);
-
-            server.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
